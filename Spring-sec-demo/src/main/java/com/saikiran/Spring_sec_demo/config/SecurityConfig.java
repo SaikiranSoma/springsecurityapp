@@ -4,9 +4,12 @@ package com.saikiran.Spring_sec_demo.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.authentication.configurers.userdetails.DaoAuthenticationConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -55,7 +58,7 @@ public class SecurityConfig {
         http
                 .csrf(customizer->customizer.disable())
         .authorizeHttpRequests(request->request
-                .requestMatchers("/register")
+                .requestMatchers("/register","/login")
                 .permitAll()
                 .anyRequest().authenticated())
         .httpBasic(Customizer.withDefaults())
@@ -81,4 +84,11 @@ public class SecurityConfig {
 //                .build();
 //            return new InMemoryUserDetailsManager(user,user1);
 //    }
+
+
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config){
+        return config.getAuthenticationManager();
+    }
 }
